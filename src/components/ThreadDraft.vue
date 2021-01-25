@@ -1,16 +1,17 @@
 <template>
   <tweet-area
     @keydown="handleKeyDown($event)"
-    @update:modelValue="updateFullText()"
+    @update:focus="setCurrentlyFocusedArea($event)"
     v-for="tweet in tweets"
     :key="tweets.indexOf(tweet)"
+    :position="tweets.indexOf(tweet)"
+    :ref="'tweetArea' + tweets.indexOf(tweet).toString()"
     v-model="tweet.text"
   />
   <strong>{{ fullText }}</strong>
 </template>
 
 <script>
-import { ref } from 'vue';
 
 import TweetArea from "./TweetArea.vue";
 
@@ -33,11 +34,8 @@ export default {
       });
     },
 
-    updateFullText() {
-      const tweetTexts = this.tweets.map((tweet) => {
-        return tweet.text;
-      });
-      this.fullText = tweetTexts.join("\n");
+    setCurrentlyFocusedArea(event) {
+      this.currentlyFocusedArea = event
     },
 
     handleKeyDown(event) {
@@ -56,6 +54,13 @@ export default {
     isLastTweetEmpty() {
       return this.tweets[this.tweets.length - 1].text === "";
     },
+
+    fullText() {
+      const tweetTexts = this.tweets.map((tweet) => {
+        return tweet.text;
+      });
+      return tweetTexts.join("\n");
+    }
   },
 };
 </script>

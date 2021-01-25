@@ -1,10 +1,12 @@
 <template>
   <textarea
+    ref="area"
     name="twit-board"
     columns="30"
     class="twit-board"
     maxlength="140"
-    v-on:input="$emit('update:modelValue', modelValue)"
+    @input="$emit('update:modelValue', modelValue)"
+    @focus="$emit('update:focus', position)"
     v-model="modelValue"
   ></textarea>
 </template>
@@ -13,9 +15,16 @@
 
 export default {
   props: {
-    modelValue: String
+    modelValue: String,
+    position: Number
   },
-  emits: ['update:modelValue'],
+
+  methods:{
+    focusArea() {
+      this.$refs.area.focus()
+    }
+  },
+  emits: ['update:modelValue', "update:isFocused"],
 }
 
 </script>
